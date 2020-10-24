@@ -1,6 +1,6 @@
 {
   "name": "@schenatosoft/react-native-credit-card",
-  "version": "1.0.1",
+  "version": "1.0.0",
   "description": "A simple and fully customizable React Native component that implements a Credit Card UI.",
   "main": "lib/index.js",
   "types": "lib/index.d.ts",
@@ -17,9 +17,6 @@
     "postversion": "git push && git push --tags"
   },
   "private": false,
-  "publishConfig": {
-    "registry": "https://npm.pkg.github.com/"
-  },
   "repository": {
     "type": "git",
     "url": "git+https://github.com/schenatosoft/react-native-credit-card.git"
