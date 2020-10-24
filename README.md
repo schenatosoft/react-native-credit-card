@@ -1,18 +1,18 @@
-![](https://img.shields.io/npm/v/@schenato/react-native-credit-card.svg?style=flat)
-![](https://img.shields.io/npm/dt/@schenato/react-native-credit-card.svg)
+![](https://img.shields.io/npm/v/@schenatosoft/react-native-credit-card.svg?style=flat)
+![](https://img.shields.io/npm/dt/@schenatosoft/react-native-credit-card.svg)
 
 ## Installation
 
 If using yarn:
 
 ```
-yarn add @schenato/react-native-credit-card
+yarn add @schenatosoft/react-native-credit-card
 ```
 
 If using npm:
 
 ```
-npm i @schenato/react-native-credit-card
+npm i @schenatosoft/react-native-credit-card
 ```
 
 ## Contributing
