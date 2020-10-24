@@ -10,3 +10,8 @@ tmp
 
 # Examples
 examples
+
+src
+tsconfig.json
+tslint.json
+.prettierrc

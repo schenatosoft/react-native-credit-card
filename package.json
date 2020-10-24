@@ -1,14 +1,20 @@
 {
   "name": "@schenatosoft/react-native-credit-card",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "A simple and fully customizable React Native component that implements a Credit Card UI.",
-  "main": "index.js",
+  "main": "lib/index.js",
+  "types": "lib/index.d.ts",
+  "files": [
+    "lib/**/*"
+  ],
+  "scripts": {
+    "build": "tsc --project ./tsconfig.json",
+    "pub": "npm version patch && publish --registry http://localhost:4873/",
+    "lint": "tslint --fix -p ./tsconfig.json"
+  },
   "private": false,
   "publishConfig": {
     "registry": "https://npm.pkg.github.com/"
-  },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
     "type": "git",
@@ -35,10 +41,10 @@
   },
   "homepage": "https://github.com/schenatosoft/react-native-credit-card#readme",
   "devDependencies": {
-    "metro-react-native-babel-preset": "^0.63.0"
-  },
-  "dependencies": {
-    "lodash": "^4.17.20",
-    "prop-types": "^15.7.2"
+    "@types/react": "^16.9.53",
+    "@types/react-native": "^0.63.30",
+    "react": "^17.0.1",
+    "react-native": "^0.63.3",
+    "typescript": "^4.0.2"
   }
 }

@@ -1,5 +1,4 @@
-![](https://img.shields.io/npm/v/@schenatosoft/react-native-credit-card.svg?style=flat)
-![](https://img.shields.io/npm/dt/@schenatosoft/react-native-credit-card.svg)
+![](https://img.shields.io/github/issues/schenatosoft/react-native-credit-card)
 
 ## Installation
 
