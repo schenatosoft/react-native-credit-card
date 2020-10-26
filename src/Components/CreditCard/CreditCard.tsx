@@ -1,19 +1,11 @@
 import cardValidator from 'card-validator';
-import React, {FC, useCallback, useEffect, useState} from 'react';
-import {SafeAreaView} from 'react-native';
+import React, { FC, useCallback, useEffect, useState } from 'react';
+import { SafeAreaView } from 'react-native';
 import InputMask from '../Inputs/InputMask/InputMask';
-import {ICreditCardInput} from './Interfaces/ICreditCardInput';
-import {
-  CardIconImage,
-  CardIcons,
-  Container,
-  ContainerHeader,
-  Form,
-  SubTitle,
-  Title,
-} from './Styles';
+import { ICreditCardInput } from './Interfaces/ICreditCardInput';
+import { CardIconImage, CardIcons, Container, ContainerHeader, Form, SubTitle, Title } from './Styles';
 
-const CreditCard: FC<ICreditCardInput> = ({onChange, supportDebitCards}) => {
+const CreditCard: FC<ICreditCardInput> = ({ onChange, supportDebitCards }) => {
   const [cardNumber, setCardNumber] = useState<string>('');
   const [cardValidation, setCardValidation] = useState<string>('');
   const [cardCode, setCardCode] = useState<string>('');
@@ -84,36 +76,47 @@ const CreditCard: FC<ICreditCardInput> = ({onChange, supportDebitCards}) => {
     <Container>
       <ContainerHeader>
         <Title>Cartão de crédito {supportDebitCards && '/ Débito'}</Title>
-        {supportDebitCards && (
-          <SubTitle>
-            Para utilizar débito, consulte as condições de uso.
-          </SubTitle>
-        )}
+        {supportDebitCards && <SubTitle>Para utilizar débito, consulte as condições de uso.</SubTitle>}
         <CardIcons>
           <CardIconImage
             resizeMethod="resize"
             resizeMode="contain"
-            source={require(`./../../Static/Icons/stp_card_mastercard.png`)}
+            source={{
+              uri:
+                'https://github.com/schenatosoft/react-native-credit-card/raw/develop/src/Static/Icons/stp_card_amex.png',
+            }}
           />
           <CardIconImage
             resizeMethod="resize"
             resizeMode="contain"
-            source={require(`./../../Static/Icons/stp_card_elo.png`)}
+            source={{
+              uri:
+                'https://github.com/schenatosoft/react-native-credit-card/raw/develop/src/Static/Icons/stp_card_diners.png',
+            }}
           />
           <CardIconImage
             resizeMethod="resize"
             resizeMode="contain"
-            source={require(`./../../Static/Icons/stp_card_amex.png`)}
+            source={{
+              uri:
+                'https://github.com/schenatosoft/react-native-credit-card/raw/develop/src/Static/Icons/stp_card_elo.png',
+            }}
           />
           <CardIconImage
             resizeMethod="resize"
             resizeMode="contain"
-            source={require(`./../../Static/Icons/stp_card_diners.png`)}
+            source={{
+              uri:
+                'https://github.com/schenatosoft/react-native-credit-card/raw/develop/src/Static/Icons/stp_card_mastercard.png',
+            }}
           />
           <CardIconImage
             resizeMethod="resize"
             resizeMode="contain"
-            source={require(`./../../Static/Icons/stp_card_visa.png`)}
+            source={{
+              uri:
+                'https://github.com/schenatosoft/react-native-credit-card/raw/develop/src/Static/Icons/stp_card_visa.png',
+            }}
           />
         </CardIcons>
       </ContainerHeader>
@@ -137,7 +140,8 @@ const CreditCard: FC<ICreditCardInput> = ({onChange, supportDebitCards}) => {
             display: 'flex',
             flexDirection: 'row',
             justifyContent: 'space-between',
-          }}>
+          }}
+        >
           <InputMask
             placeholder="Validade"
             type="custom"
