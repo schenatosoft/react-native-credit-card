@@ -8,6 +8,7 @@
  * @format
  */
 
+import {CreditCard} from '@schenatosoft/react-native-credit-card';
 import cardValidator from 'card-validator';
 import React, {FC, useState} from 'react';
 import {
@@ -27,6 +28,11 @@ const App = () => {
   return (
     <>
       <StatusBar barStyle="dark-content" />
+      <CreditCard
+        onChange={(card) => {
+          console.log('card values changes', card);
+        }}
+      />
     </>
   );
 };

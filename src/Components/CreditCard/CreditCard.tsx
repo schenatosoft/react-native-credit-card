@@ -1,21 +1,28 @@
 import cardValidator from 'card-validator';
-import React, { FC, useState } from 'react';
-import { SafeAreaView, StyleSheet, Text, TextInput } from 'react-native';
-import { TextInputMask } from 'react-native-masked-text';
-import { ICreditCard } from '../../Model/ICreditCard';
-import { ICreditCardInput } from './Interfaces/ICreditCardInput';
+import React, {FC, useCallback, useEffect, useState} from 'react';
+import {SafeAreaView} from 'react-native';
+import InputMask from '../Inputs/InputMask/InputMask';
+import {ICreditCardInput} from './Interfaces/ICreditCardInput';
+import {
+  CardIconImage,
+  CardIcons,
+  Container,
+  ContainerHeader,
+  Form,
+  SubTitle,
+  Title,
+} from './Styles';
 
-const CreditCard: FC<ICreditCardInput> = ({ inputStyles }) => {
-  const [cardValues, setCardValues] = useState<ICreditCard>({
-    cardNumber: '',
-    cvc: 0,
-    holderName: '',
-    validation: 0,
-    isValid: false,
-  });
+const CreditCard: FC<ICreditCardInput> = ({onChange, supportDebitCards}) => {
+  const [cardNumber, setCardNumber] = useState<string>('');
+  const [cardValidation, setCardValidation] = useState<string>('');
+  const [cardCode, setCardCode] = useState<string>('');
+  const [cardHolderName, setCardHolderName] = useState<string>('');
+  const [cardIsValid, setCardIsValid] = useState<boolean>(false);
 
   const [cardType, setCardType] = useState<{
     maskNumber: string;
+    maskCvv: string;
     type: string;
     card: {
       niceType: string;
@@ -30,97 +37,146 @@ const CreditCard: FC<ICreditCardInput> = ({ inputStyles }) => {
     } | null;
   }>({
     maskNumber: '9999',
+    maskCvv: '999',
     type: 'unknow',
     card: null,
   });
 
+  useEffect(() => {
+    if (onChange) {
+      onChange({
+        cardNumber,
+        code: cardCode,
+        holderName: cardHolderName,
+        isValid: cardIsValid,
+        validation: cardValidation,
+      });
+    }
+
+    const card = cardValidator.number(cardNumber);
+    setCardIsValid(card.isValid);
+
+    if (card && card.card) {
+      let maskCard = '';
+      let maskCvv = '';
+      const cardLenght = card.card.lengths[card.card.lengths.length - 1];
+      for (let index = 0; index < cardLenght; index++) {
+        if (index % 4 === 0 && index > 1) {
+          maskCard += ' ';
+        }
+        maskCard += '9';
+      }
+
+      for (let index = 0; index < card.card.code.size; index++) {
+        maskCvv += '9';
+      }
+
+      setCardType({
+        type: card.card.type,
+        maskNumber: maskCard,
+        maskCvv,
+        card: card.card,
+      });
+    }
+  }, [cardNumber, cardValidator, cardCode, cardHolderName]);
+
   return (
-    <SafeAreaView style={styles.container}>
-      <SafeAreaView style={styles.containerTop}>
-        <Text style={styles.containerTitle}>Cartão de crédito</Text>
-        <Text style={styles.containerSubTitle}>Para utilizar débito, consulte as condições de uso.</Text>
-        <SafeAreaView style={styles.cardIcons}></SafeAreaView>
-      </SafeAreaView>
-      <SafeAreaView style={styles.inputRow}>
-        {cardValues.cardNumber.length > 0 && <Text style={styles.defaultLabel}>Número do cartão</Text>}
-        <TextInputMask
+    <Container>
+      <ContainerHeader>
+        <Title>Cartão de crédito {supportDebitCards && '/ Débito'}</Title>
+        {supportDebitCards && (
+          <SubTitle>
+            Para utilizar débito, consulte as condições de uso.
+          </SubTitle>
+        )}
+        <CardIcons>
+          <CardIconImage
+            resizeMethod="resize"
+            resizeMode="contain"
+            source={require(`./../../Static/Icons/stp_card_mastercard.png`)}
+          />
+          <CardIconImage
+            resizeMethod="resize"
+            resizeMode="contain"
+            source={require(`./../../Static/Icons/stp_card_elo.png`)}
+          />
+          <CardIconImage
+            resizeMethod="resize"
+            resizeMode="contain"
+            source={require(`./../../Static/Icons/stp_card_amex.png`)}
+          />
+          <CardIconImage
+            resizeMethod="resize"
+            resizeMode="contain"
+            source={require(`./../../Static/Icons/stp_card_diners.png`)}
+          />
+          <CardIconImage
+            resizeMethod="resize"
+            resizeMode="contain"
+            source={require(`./../../Static/Icons/stp_card_visa.png`)}
+          />
+        </CardIcons>
+      </ContainerHeader>
+      <Form>
+        <InputMask
+          placeholder="Número do Cartão"
+          fullLine
           type="custom"
           options={{
             mask: cardType.maskNumber,
           }}
-          value={cardValues.cardNumber}
-          style={[styles.defaultInputs]}
-          placeholder="Número do Cartão"
+          value={cardNumber}
           keyboardType="numeric"
           includeRawValueInChangeText={true}
           onChangeText={(value, rawText) => {
-            console.log(rawText);
-            setCardValues({
-              ...cardValues,
-              cardNumber: rawText || '',
-            });
-            const card = cardValidator.number(rawText);
-            console.log(card);
-            if (card && card.card) {
-              let maskCard = '';
-              const cardLenght = card.card.lengths[card.card.lengths.length - 1];
-              for (let index = 0; index < cardLenght; index++) {
-                maskCard += '9';
-              }
-              console.log(maskCard);
-              setCardType({
-                type: card.card.type,
-                maskNumber: maskCard,
-                card: card.card,
-              });
-            }
+            setCardNumber(rawText || '');
           }}
         />
-      </SafeAreaView>
-    </SafeAreaView>
+        <SafeAreaView
+          style={{
+            display: 'flex',
+            flexDirection: 'row',
+            justifyContent: 'space-between',
+          }}>
+          <InputMask
+            placeholder="Validade"
+            type="custom"
+            options={{
+              mask: '99/99',
+            }}
+            value={cardValidation}
+            keyboardType="numeric"
+            includeRawValueInChangeText={true}
+            onChangeText={(value, rawText) => {
+              setCardValidation(rawText || '');
+            }}
+          />
+          <InputMask
+            placeholder={(cardType.card && cardType.card.code.name) || 'CVV'}
+            type="custom"
+            options={{
+              mask: cardType.maskCvv,
+            }}
+            value={cardCode}
+            keyboardType="numeric"
+            includeRawValueInChangeText={true}
+            onChangeText={(value, rawText) => {
+              setCardCode(rawText || '');
+            }}
+          />
+        </SafeAreaView>
+        <InputMask
+          placeholder={'Nome do Titular'}
+          type="custom"
+          fullLine
+          value={cardHolderName}
+          onChangeText={(value) => {
+            setCardHolderName(value);
+          }}
+        />
+      </Form>
+    </Container>
   );
 };
-
-const styles = StyleSheet.create({
-  container: {
-    display: 'flex',
-    flexDirection: 'column',
-  },
-  containerTop: {
-    display: 'flex',
-    flexDirection: 'column',
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  containerTitle: {
-    fontSize: 14,
-    fontWeight: 'bold',
-  },
-  containerSubTitle: {
-    fontSize: 11,
-  },
-  cardIcons: {
-    display: 'flex',
-    flexDirection: 'row',
-  },
-  defaultInputs: {
-    display: 'flex',
-    textAlign: 'left',
-    color: 'rgb(32, 32, 32)',
-    borderBottomWidth: 0.8,
-    borderBottomColor: 'red',
-    opacity: 0.8,
-    minHeight: 40,
-  },
-  defaultLabel: {
-    fontSize: 10,
-    marginLeft: 5,
-  },
-  inputRow: {
-    display: 'flex',
-    flexDirection: 'column',
-    margin: 10,
-  },
-});
 
 export default CreditCard;

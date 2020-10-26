@@ -1,8 +1,8 @@
 export interface ICreditCard {
   holderName: string;
   cardNumber: string;
-  cvc: number;
-  validation: number;
+  code: string;
+  validation: string;
 
   isValid: boolean;
 }

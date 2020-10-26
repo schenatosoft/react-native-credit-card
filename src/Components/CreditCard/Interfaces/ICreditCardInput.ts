@@ -1,5 +1,7 @@
-import { StyleProp, TextStyle } from 'react-native';
+import {StyleProp, TextStyle} from 'react-native';
+import {ICreditCard} from '../../../Model/ICreditCard';
 
 export interface ICreditCardInput {
-  inputStyles?: StyleProp<TextStyle>;
+  onChange: (card: ICreditCard) => void;
+  supportDebitCards?: boolean;
 }
